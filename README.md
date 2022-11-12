@@ -172,14 +172,97 @@ The query processor interprets, compiles, and executes the queries.
 
 Its main components:
 
-- [DDL](#ddl-data-definition-language) interpreter: interprets [DDL](#ddl-data-definition-language) statement to 
-- [DML](#dml-data-manipulation-language) compiler: translates [DML](#dml-data-manipulation-language) statements to evaluation plans consisting low-level instructions and chooses the lowest
+- [DDL](#ddl-data-definition-language) interpreter: interprets [DDL](#ddl-data-definition-language) statement to
+- [DML](#dml-data-manipulation-language) compiler: translates [DML](#dml-data-manipulation-language) statements to
+  evaluation plans consisting low-level instructions and chooses the lowest
   cost plan (query optimization).
 - Query evaluation engine: execute the low-level instructions.
 
 ## Database application architectures
 
-Almost enterprise applications are database applications and use the [client-server application architecture](https://github.com/nghianguyentek/software-architecture/blob/main/client-server.md).
+Generally, a database application is a network application has three main components:
 
+- A command input: an application for user to input [database language](#database-languages) commands directly
+  or indirectly (the application generates the database commands based on the provided features).
+- A database connector: provides APIs (Application Programming Interfaces) for the command input to connect and interact
+  with the
+  database.
+- And the database.
 
+Because they
+are [network applications](https://github.com/nghianguyentek/software-architecture/blob/main/network.md#network-application)
+, there are two architectures are often used, [2-tier](#2-tier-database-applications)
+and [3-tier](#3-tier-database-applications)(https://github.com/nghianguyentek/software-architecture/blob/main/3-tier.md)
+.
 
+### 2-tier database applications
+
+Based on the [2-tier network architecture](https://github.com/nghianguyentek/software-architecture/blob/main/2-tier.md),
+the components can be arranged as the below figure:
+
+```mermaid
+flowchart LR
+
+subgraph Server Machine
+Database
+end
+
+subgraph Client Machine
+Client[Command Input]
+DbConnector[Database Connector]
+
+Client--commands-->DbConnector
+DbConnector--results-->Client
+end
+
+DbConnector--commands-->Database
+Database--results-->DbConnector
+```
+
+**Figure 1:** *2-tier database application architecture.*
+
+The typical for the 2-tier database applications is Query and BI (Business Intelligent) tools for database management,
+data analytic, and
+report generations.
+
+### 3-tier database applications
+
+It separates the command input component to:
+
+- Client App component: is mainly responsible for rendering UI, receiving and validating user input, and then, sending user input
+  to the Server App.
+- Server App component: is responsible for validating user input receiving from the Client App, executing the appropriate business
+  logic, and translating them into database commands when necessary. These commands will be sent to the Database
+  Connector as in the [2-tier database architecture](#2-tier-database-applications).
+
+And arranging them as the below figure:
+
+```mermaid
+flowchart LR
+
+subgraph Database Machine
+Database
+end
+
+subgraph Server Machine
+Server[Server App]
+DbConnector[Database Connector]
+
+Server--commands-->DbConnector
+DbConnector--results-->Server
+
+end
+
+subgraph Client Machine
+Client[Client App]
+end
+
+Client--requests-->Server
+Server--responses-->Client
+DbConnector--commands-->Database
+Database--results-->DbConnector
+```
+
+**Figure 2:** *3-tier database application architecture.*
+
+Most common enterprise applications are 3-tier database application, especially web and mobile applications.
