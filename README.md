@@ -116,7 +116,6 @@ There are two typical database user groups:
 - Naive users: who interact with databases through application interfaces only.
 - Application programmers: who write applications.
 - Sophisticated users: who interact with databases through query processor mostly for analysing and reporting purposes.
-- Specialised users:
 
 ### Database administrators (DBA)
 
@@ -184,9 +183,12 @@ Generally, a database application is a network application has three main compon
 
 - A command input: an application for user to input [database language](#database-languages) commands directly
   or indirectly (the application generates the database commands based on the provided features).
-- A database connector: provides APIs (Application Programming Interfaces) for the command input to connect and interact
+- A database connector: the implementation of a particular database connectivity standard (i.e., APIs - Application
+  Programming Interfaces) for the
+  command input to connect and interact
   with the
-  database.
+  database. ODBC (Open Database Connectivity) and JDBC (Java Database Connectivity) are two popular database
+  connectivity standards.
 - And the database.
 
 Because they
@@ -221,17 +223,21 @@ Database--results-->DbConnector
 
 **Figure 1:** *2-tier database application architecture.*
 
-The typical for the 2-tier database applications is Query and BI (Business Intelligent) tools for database management,
+The typical 2-tier database applications are Query and BI (Business Intelligent) tools for database management,
 data analytic, and
 report generations.
 
 ### 3-tier database applications
 
-It separates the command input component to:
+A 3-tier database application is just an extension of a [2-tier](#2-tier-database-applications) one. It separates
+the
+command input component to:
 
-- Client App component: is mainly responsible for rendering UI, receiving and validating user input, and then, sending user input
+- Client App component: is mainly responsible for rendering UI, receiving and validating user input, and then, sending
+  user input
   to the Server App.
-- Server App component: is responsible for validating user input receiving from the Client App, executing the appropriate business
+- Server App component: is responsible for validating user input receiving from the Client App, executing the
+  appropriate business
   logic, and translating them into database commands when necessary. These commands will be sent to the Database
   Connector as in the [2-tier database architecture](#2-tier-database-applications).
 
@@ -266,3 +272,8 @@ Database--results-->DbConnector
 **Figure 2:** *3-tier database application architecture.*
 
 Most common enterprise applications are 3-tier database application, especially web and mobile applications.
+
+### n-tier database applications
+
+A n-tier database application, as you can guess, is an extension of a [3-tier](#3-tier-database-applications) one. Based
+on the actual needs, we separate the Server App component to two or more sub-tiers.
